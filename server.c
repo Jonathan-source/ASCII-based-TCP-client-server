@@ -18,13 +18,23 @@ int main(int argc, char *argv[])
 		std::cout << "[Error]: Socket not created.";
 		return EXIT_FAILURE;
 	}
-
+	
 	//============== 2. Bind the socket to a socket address using bind(). ============
 
 	// Socket address information needed for binding.
 	sockaddr_in server_addr, client_addr;
 	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = 0;								// Problems: May I pick "any" port number? Do I need to convert using htons?
+	server_addr.sin_port = 0;										// Problems: May I pick "any" port number? Do I need to convert using htons?
+
+	bzero((char*) &server_addr, sizeof(server_addr));  				// Clear the server address before using it.
+	
+	
+	if(bind(sockfd, (struct sockaddr * ) &server_addr, sizeof(server_addr)) < 0)
+	{
+		std::cout "[Error]: Failed to bind socket to a socket address.";
+		return EXIT_FAILURE;
+	} 
+
 
     //============== 3. Listen for connections using listen(). =======================
 
