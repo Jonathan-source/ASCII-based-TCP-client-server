@@ -1,11 +1,11 @@
 /*===========================================================================================================
-		This is a simple server in the internet domain using TCP, the port number is passed as an argument.
+	This is a simple server in the internet domain using TCP, the port number is passed as an argument.
 ============================================================================================================/*
 
-#include <stdio.h>			// input output.
-#include <sys/types.h> 		// a set of data types used in system calles.
-#include <sys/socket.h>		// needed for sockets. 
-#include <netinet/in.h>		// 
+#include <stdio.h>			
+#include <sys/types.h> 		
+#include <sys/socket.h>		 
+#include <netinet/in.h>		 
 
 int main(int argc, char *argv[])
 {
@@ -24,10 +24,10 @@ int main(int argc, char *argv[])
 	// Socket address information needed for binding.
 	sockaddr_in server_addr, client_addr;
 	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = 0;										// Problems: May I pick "any" port number? Do I need to convert using htons?
+	server_addr.sin_port = htons(9009);								// Temporary random high number that is not used by the OS. It will later be passed as an argument.
+	server_addr.sin_addr.s_addr = INADDR_ANY; 						// "0.0.0.0" 
 
 	bzero((char*) &server_addr, sizeof(server_addr));  				// Clear the server address before using it.
-	
 	
 	if(bind(sockfd, (struct sockaddr * ) &server_addr, sizeof(server_addr)) < 0)
 	{
