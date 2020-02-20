@@ -1,5 +1,5 @@
 /*===========================================================================================================
-								A simple TCP server on port number 9002.
+				A simple TCP server on port number 9002.
 ============================================================================================================/*
 
 #include <stdio.h>			
@@ -25,34 +25,34 @@ int main(int argc, char *argv[])
 	sockaddr_in client;
 	socklen_t clientSize;
 	
-    //============== 1. Create a socket using socket(). ==============================
+//============== 1. Create a socket using socket(). ================================
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
 	if(sockfd < 0)
 		error("socket was not created.");
 	
-	//============== 2. Bind the socket to a socket address using bind(). ============
+//============== 2. Bind the socket to a socket address using bind(). =============
 
 	portno = 9002													
-	bzero((char*) &server, sizeof(server));  								// Clear the server address before using it.
+	bzero((char*) &server, sizeof(server));  					// Clear the server address before using it.
 
 	// Socket address information needed for binding.
 	server.sin_family = AF_INET;
 	server.sin_port = htons(portno);							
-	server.sin_addr.s_addr = INADDR_ANY; 									// "0.0.0.0" 
+	server.sin_addr.s_addr = INADDR_ANY; 						// "0.0.0.0" 
 
 	if(bind(sockfd, (struct sockaddr * ) &server, sizeof(server)) < 0)
 		error("socket was not bound to a socket address.");
 
-    //============== 3. Listen for connections using listen(). =======================
+//============== 3. Listen for connections using listen(). ========================
 	
 	// Mark the socket for listening.
 
 	if(listen(sockfd, SOMAXCONN) < 0)	
 		error("listen failed.");
 
-    //============== 4. Accept a connection using accept(). ==========================
+//============== 4. Accept a connection using accept(). ===========================
 	clientSize = sizeof(client);
 		
 	if(accept(sockfd, (sockaddr*) &client), &clientSize))
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 	
 
 
-	//============== 5. Send and receive data using send() and recv(). ===============
+//============== 5. Send and receive data using send() and recv(). ================
 
 
 
