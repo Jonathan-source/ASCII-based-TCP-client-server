@@ -2,7 +2,8 @@
 				A simple TCP server on port number 9002.
 ============================================================================================================*/
 
-#include <stdio.h>				
+#include <stdio.h>		
+#include <string.h>		
 #include <sys/types.h> 		
 #include <sys/socket.h>		 
 #include <netinet/in.h>	
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
 	int connfd;
 	struct sockaddr_in clientAddr;
 
-	socklen_t addrSize;
+	socklen_t clientLen;
 	char buffer[256];
 	
 //============== 1. Create a socket using socket(). ================================
@@ -31,7 +32,7 @@ int main(int argc, char *argv[])
 	
 //============== 2. Bind the socket to a socket address using bind(). =============
 											
-	memset(&serverAddr, '\0', sizeof(serverAddr));  							// Zero out structure.
+	memset(&serverAddr, 0, sizeof(serverAddr));  							// Zero out structure.
 
 	// Socket address information needed for binding.
 	serverAddr.sin_family = AF_INET;
@@ -47,30 +48,29 @@ int main(int argc, char *argv[])
 
 	if(listen(sockfd, SOMAXCONN) < 0)	
 		perror("listen failed.");
-	sprintf("waiting for a connection on port: %i", SERVER_PORT);
+	printf("waiting for a connection on port: %i", SERVER_PORT);
 
 //============== 4. Accept a connection using accept(). ===========================
 
-	addrSize = sizeof(clientAddr);
+	clientLen = sizeof(clientAddr);
 		
-	connfd = accept((sockfd, (sockaddr*) &clientAddr), &addrSize);
-	if(connfd < 0)
+	if((connfd = accept(sockfd, (struct sockaddr *) &clientAddr, &clientLen)) < 0)
 		perror("could not connect with the client.");
 
 //============== 5. Send and receive data using send() and recv(). ================
 
 	// Receive / read data.
-	memset(buffer, 256);
-	if(recv(sockfd, buffer, 256) < 0)
+	memset(buffer, '\n', 256);
+	if(recv(connfd, buffer, 256) < 0)
 		perror("could not read from socket.");
 	printf("%s", buffer);
 
 	// Send string to the server.
-	if(send(sockfd, "Success", 7) < 0)
+	if(send(connfd, "Success", 7) < 0)
 		perror("could not write to socket.");
 
 
 	// Close socket.
-	close(sockfd);
+	close(connfd);
 	return 0;
 }
