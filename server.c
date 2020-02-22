@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     if(sockfd = socket(AF_INET, SOCK_STREAM, 0) < 0)
 		perror("[Server]: socket was not created.");
 	else
-		printf("[Server]: socket was created.");
+		printf("\n[Server]: socket was created.");
 	
 //============== 2. Bind the socket to a socket address using bind(). =============
 											
@@ -44,14 +44,14 @@ int main(int argc, char *argv[])
 	if(bind(sockfd, (struct sockaddr * ) &serverAddr, sizeof(serverAddr)) < 0)
 		perror("[Server]: socket was not bound to a socket address.");
 	else
-		printf("[Server]: socket was bound to socket address.");
+		printf("\n[Server]: socket was bound to socket address.");
 
 //============== 3. Listen for connections using listen(). ========================
 	
 	if(listen(sockfd, SOMAXCONN) < 0)	
 		perror("[Server]: listen was not performed.");
 	else
-		printf("[Server]: waiting for a connection on port: %i", SERVER_PORT);
+		printf("\n[Server]: waiting for a connection on port: %i", SERVER_PORT);
 
 //============== 4. Accept a connection using accept(). ===========================
 
@@ -59,6 +59,8 @@ int main(int argc, char *argv[])
 		
 	if((connfd = accept(sockfd, (struct sockaddr *) &clientAddr, &clientLen)) < 0)
 		perror("[Server]: could not connect with the client.");
+	else
+		printf("\n[Server]: successfully connected with the client.");
 
 //============== 5. Send and receive data using send() and recv(). ================
 
@@ -71,11 +73,11 @@ int main(int argc, char *argv[])
 
 	// Send data.
 	memset(sendBuff, '\n', sizeof(sendBuff));
-	if(send(connfd, "[Server]: data received.", 15, 0) < 0)
-		perror("[Server]: could not write to socket.");
+	if(send(connfd, "\n[Server]: data received.", 15, 0) < 0)
+		perror("\n[Server]: could not write to socket.");
 
 	// Close socket.
 	// ???
-	
+
 	return 0;
 }
