@@ -2,7 +2,8 @@
 				A simple TCP server on port number 9002.
 ============================================================================================================*/
 
-#include <stdio.h>		
+#include <stdio.h>	
+#include <stdlib.h>	
 #include <string.h>		
 #include <sys/types.h> 		
 #include <sys/socket.h>		 
@@ -61,16 +62,16 @@ int main(int argc, char *argv[])
 
 	// Receive / read data.
 	memset(buffer, '\n', 256);
-	if(recv(connfd, buffer, 256) < 0)
+	if(recv(connfd, buffer, sizeof(buffer), 0) < 0)
 		perror("could not read from socket.");
-	printf("%s", buffer);
+	printf("\n%s", buffer);
 
 	// Send string to the server.
-	if(send(connfd, "Success", 7) < 0)
+	if(send(connfd, "Success", 7, 0) < 0)
 		perror("could not write to socket.");
 
 
 	// Close socket.
-	close(connfd);
+	
 	return 0;
 }
