@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		perror("[Client]: could not create socket.");
 	else
-		printf("\n[Client]: socket was created.");
+		printf("[Client]: socket was created.\n");
 
 	
 	memset(&serverAddr, 0, sizeof(serverAddr));
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 	if(connect(sockfd, (struct sockaddr *) &serverAddr, sizeof(serverAddr)) < 0)
 		perror("[Client]: could not connect with the server.");
 	else
-		printf("\n[Client]: successfully connected with the server.");
+		printf("[Client]: successfully connected with the server.\n");
 
 	memset(sendBuff, '\0', sizeof(sendBuff));
 	sprintf(sendBuff, "This is a text sent by the client");
