@@ -7,17 +7,20 @@
 #include <sys/socket.h>		 
 #include <netinet/in.h>	
 
+#define SERVER_PORT 9002
+
 void perror(char const * msg);
 
 int main(int argc, char *argv[])
 {
 	int sockfd;
-	int portno;
-	int clientsocket;
+	struct sockaddr_in serverAddr;
+
+	int connfd;
+	struct sockaddr_in clientAddr;
+
+	socklen_t addrSize;
 	char buffer[256];
-	sockaddr_in server;
-	sockaddr_in client;
-	socklen_t clientSize;
 	
 //============== 1. Create a socket using socket(). ================================
 
@@ -27,16 +30,15 @@ int main(int argc, char *argv[])
 		perror("socket was not created.");
 	
 //============== 2. Bind the socket to a socket address using bind(). =============
-
-	portno = 9002													
-	memset(&server, sizeof(server));  							// Zero out structure.
+											
+	memset(&serverAddr, '\0', sizeof(serverAddr));  							// Zero out structure.
 
 	// Socket address information needed for binding.
-	server.sin_family = AF_INET;
-	server.sin_port = htons(portno);							
-	server.sin_addr.s_addr = INADDR_ANY; 						// "0.0.0.0" 
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_port = htons(SERVER_PORT);									// Convert to network standard order.
+	serverAddr.sin_addr.s_addr = INADDR_ANY; 									// "0.0.0.0" 
 
-	if(bind(sockfd, (struct sockaddr * ) &server, sizeof(server)) < 0)
+	if(bind(sockfd, (struct sockaddr * ) &serverAddr, sizeof(serverAddr)) < 0)
 		perror("socket was not bound to a socket address.");
 
 //============== 3. Listen for connections using listen(). ========================
@@ -45,12 +47,14 @@ int main(int argc, char *argv[])
 
 	if(listen(sockfd, SOMAXCONN) < 0)	
 		perror("listen failed.");
+	sprintf("waiting for a connection on port: %i", SERVER_PORT);
 
 //============== 4. Accept a connection using accept(). ===========================
 
-	clientSize = sizeof(client);
+	addrSize = sizeof(clientAddr);
 		
-	if(accept(sockfd, (sockaddr*) &client), &clientSize);
+	connfd = accept((sockfd, (sockaddr*) &clientAddr), &addrSize);
+	if(connfd < 0)
 		perror("could not connect with the client.");
 
 //============== 5. Send and receive data using send() and recv(). ================
