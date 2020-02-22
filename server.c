@@ -1,5 +1,5 @@
 /*===========================================================================================================
-				A simple TCP server on port number 9002.
+										A simple TCP server in C-programming.
 ============================================================================================================*/
 
 #include <stdio.h>	
@@ -9,7 +9,7 @@
 #include <sys/socket.h>		 
 #include <netinet/in.h>	
 
-#define SERVER_PORT 9002
+#define SERVER_PORT 9999
 
 void perror(char const * msg);
 
@@ -20,9 +20,10 @@ int main(int argc, char *argv[])
 
 	int connfd;
 	struct sockaddr_in clientAddr;
-
 	socklen_t clientLen;
-	char buffer[256];
+
+	char sendBuff[256];
+    char recvBuff[256];
 	
 //============== 1. Create a socket using socket(). ================================
 
@@ -60,18 +61,19 @@ int main(int argc, char *argv[])
 
 //============== 5. Send and receive data using send() and recv(). ================
 
-	// Receive / read data.
-	memset(buffer, '\n', 256);
-	if(recv(connfd, buffer, sizeof(buffer), 0) < 0)
+	// Receive data.
+	memset(recvBuffer, '\n', sizeof(recvBuffer));
+	if(recv(connfd, buffer, sizeof(recvBuffer), 0) < 0)
 		perror("could not read from socket.");
-	printf("\n%s", buffer);
+	printf("\n%s", recvBuffer);
 
-	// Send string to the server.
-	if(send(connfd, "Success", 7, 0) < 0)
+	// Send data.
+	memset(sendBuffer, '\n', sizeof(sendBuffer));
+	sendBuffer[256] = "Data reseived.";
+	if(send(connfd, sendBuffer, 15, 0) < 0)
 		perror("could not write to socket.");
 
-
 	// Close socket.
-	
+	close(sockfd);
 	return 0;
 }
